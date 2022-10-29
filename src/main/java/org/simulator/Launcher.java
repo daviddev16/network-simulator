@@ -3,13 +3,13 @@ package org.simulator;
 import java.util.Random;
 
 import org.simulator.core.exception.EngineException;
-import org.simulator.core.main.Simulation;
+import org.simulator.core.main.SimulationWindow;
 
 public class Launcher {
 
 	public static void main(String[] args) throws EngineException {
 		
-		Simulation simulation = new Simulation("Network Simulation");
+		SimulationWindow simulation = new SimulationWindow("Network Simulation");
 		simulation.start();
 		
 		System.out.println(generateRandomMACAddress());
