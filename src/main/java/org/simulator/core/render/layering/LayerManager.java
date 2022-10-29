@@ -18,7 +18,7 @@ public class LayerManager {
 	}
 
 	public void insert(Layer layer) {
-		if(layers.contains(layer))
+		if(!layers.contains(layer))
 			layers.add(layer);
 	}
 

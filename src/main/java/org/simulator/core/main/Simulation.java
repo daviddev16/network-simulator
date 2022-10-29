@@ -1,16 +1,18 @@
-package org.simulator.core;
+package org.simulator.core.main;
 
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+import org.simulator.core.enums.SimulationState;
 import org.simulator.core.exception.EngineException;
-import org.simulator.core.misc.SimulationState;
 
 public class Simulation extends Canvas implements Runnable {
 
@@ -26,7 +28,7 @@ public class Simulation extends Canvas implements Runnable {
 	public Simulation(final String title) throws EngineException {
 		
 		if (Engine.getEngine() == null)
-			new Engine(); 
+			new Engine();
 
 		initializeWindow(title);
 		initializeDefaults();
@@ -38,6 +40,7 @@ public class Simulation extends Canvas implements Runnable {
 			throw new RuntimeException("Simulation already started.");
 
 		changeSimulationState(SimulationState.RUNNING);
+		Engine.getEngine().onStart();
 		simulationThread.start();
 		window.setVisible(true);
 	}
@@ -47,6 +50,7 @@ public class Simulation extends Canvas implements Runnable {
 			throw new RuntimeException("Simulation already stopped.");
 
 		changeSimulationState(SimulationState.STOPPED);
+		Engine.getEngine().onEnd();
 		simulationThread.interrupt();
 		window.dispose();
 	}
@@ -58,13 +62,15 @@ public class Simulation extends Canvas implements Runnable {
 
 	@Override
 	public void run() {
-		try { 
+		try {
 			while (currentState != SimulationState.STOPPED) {
 				Engine.getEngine().tick();
 				repaint();
 				Thread.sleep(1000/60);
 			}
-		}catch(Exception e) {
+		}
+		catch(InterruptedException e) { /* ignore */ }
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -90,8 +96,15 @@ public class Simulation extends Canvas implements Runnable {
 
 	private void initializeWindow(String title) {
 		window = new JFrame(title);
+		window.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				stop();
+			}
+		});
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setSize(new Dimension(WIDTH, HEIGHT));
+		window.setLocationRelativeTo(null);
 		window.setResizable(false);
 		window.add(this);
 	}

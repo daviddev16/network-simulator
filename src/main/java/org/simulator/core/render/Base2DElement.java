@@ -1,9 +1,9 @@
-package org.simulator.core;
+package org.simulator.core.render;
 
 import java.awt.Graphics2D;
+import java.util.Objects;
 
-import org.simulator.core.exception.EngineException;
-import org.simulator.core.render.Renderer;
+import org.simulator.core.essential.Behaviour;
 
 public abstract class Base2DElement implements Behaviour {
 
@@ -36,12 +36,8 @@ public abstract class Base2DElement implements Behaviour {
 		return this.renderer;
 	}
 	
-	public void setRenderer(Renderer renderer) throws EngineException {
-		if (renderer == null)
-			throw new EngineException("Invalid renderer.");
-			
-		renderer.setParent(this);
-		this.renderer = renderer;
+	public void setRenderer(Renderer renderer) {
+		this.renderer = Objects.requireNonNull(renderer, "Renderer cannot be null.");
 	}
 	
 	public int getX() {

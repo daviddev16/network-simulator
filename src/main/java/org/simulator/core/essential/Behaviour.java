@@ -1,4 +1,4 @@
-package org.simulator.core;
+package org.simulator.core.essential;
 
 import java.awt.Graphics2D;
 

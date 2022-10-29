@@ -2,8 +2,8 @@ package org.simulator;
 
 import java.util.Random;
 
-import org.simulator.core.Simulation;
 import org.simulator.core.exception.EngineException;
+import org.simulator.core.main.Simulation;
 
 public class Launcher {
 

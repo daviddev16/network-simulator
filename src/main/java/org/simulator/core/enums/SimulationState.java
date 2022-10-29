@@ -1,4 +1,4 @@
-package org.simulator.core.misc;
+package org.simulator.core.enums;
 
 public enum SimulationState {
 

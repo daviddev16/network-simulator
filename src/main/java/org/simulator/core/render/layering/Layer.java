@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.simulator.core.Base2DElement;
+import org.simulator.core.essential.Behaviour;
+import org.simulator.core.render.Base2DElement;
 
-public abstract class Layer implements Comparable<Layer> {
+public abstract class Layer implements Comparable<Layer>, Behaviour {
 	
 	private final int order;
 
@@ -24,6 +25,27 @@ public abstract class Layer implements Comparable<Layer> {
 		}
 	}
 
+	@Override
+	public void onStart() {
+		for (Base2DElement element : elements) {
+			element.onStart();
+		}
+	}
+	
+	@Override
+	public void onEnd() {
+		for (Base2DElement element : elements) {
+			element.onEnd();
+		}
+	}
+	
+	@Override
+	public void tick() {
+		for (Base2DElement element : elements) {
+			element.tick();
+		}
+	}
+	
 	public void insert(Base2DElement element) {
 		elements.add(Objects.requireNonNull(element));
 	}

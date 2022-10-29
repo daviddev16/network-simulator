@@ -1,4 +1,4 @@
-package org.simulator.core;
+package org.simulator.core.essential;
 
 public interface Unique {
 	
