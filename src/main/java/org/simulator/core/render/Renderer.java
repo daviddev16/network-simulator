@@ -8,7 +8,7 @@ import org.simulator.core.Base2DElement;
 /* parent cannot be null */
 public interface Renderer {
 
-	public void drawOn(Graphics2D g2d);
+	public void draw(Graphics2D g2d);
 	
 	public void setParent(Base2DElement element);
 	

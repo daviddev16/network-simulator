@@ -1,9 +1,9 @@
 package org.simulator.core;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.simulator.core.exception.SingletonException;
+import org.simulator.core.render.layering.Layer;
 import org.simulator.core.render.layering.LayerManager;
 
 public final class Engine {
@@ -30,10 +30,21 @@ public final class Engine {
 	}
 	
 	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.RED);
-		g2d.drawRect(20, 20, 10, 20);
+		for (Layer layer : layerManager.getLayers()) {
+			layer.render(g2d);
+		}
 	}
 	
-	public void tick() {}
+	public void onStart() {
+		
+	}
+	
+	public void onStop() {
+		
+	}
+	
+	public void tick() {
+		System.out.println("ticking");
+	}
 	
 }

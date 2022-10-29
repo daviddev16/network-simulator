@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import org.simulator.core.exception.EngineException;
 import org.simulator.core.render.Renderer;
 
-public abstract class Base2DElement implements Behaviour{
+public abstract class Base2DElement implements Behaviour {
 
 	private int x, y, width, height;
 	private Renderer renderer;
@@ -17,14 +17,19 @@ public abstract class Base2DElement implements Behaviour{
 		this.height = height;
 	}
 	
-	public Base2DElement(int objectId) {
-		this(0, 0, 16, 16);
-	}
+	@Override
+	public void tick() {}
+	
+	@Override
+	public void onEnd() {}
+
+	@Override
+	public void onStart() {}
 	
 	@Override
 	public void render(Graphics2D g2d) {
 		if (renderer != null)
-			renderer.drawOn(g2d);
+			renderer.draw(g2d);
 	}
 
 	public Renderer getRenderer() {
@@ -55,13 +60,4 @@ public abstract class Base2DElement implements Behaviour{
 		return height;
 	}
 	
-	@Override
-	public void tick() {}
-	
-	@Override
-	public void onEnd() {}
-
-	@Override
-	public void onStart() {}
-
 }
