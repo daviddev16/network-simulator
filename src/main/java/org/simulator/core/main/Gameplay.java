@@ -6,7 +6,7 @@ import org.simulator.gameplay.impl.Computer;
 
 public class Gameplay {
 	
-	private static final LayerManager LAYERS = Engine.getEngine().gerLayerManager();
+	private static final LayerManager LAYERS = LayerManager.getLayerManager();
 	
 	Gameplay() {}
 	

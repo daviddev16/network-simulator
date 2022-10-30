@@ -5,13 +5,17 @@ import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.management.InstanceAlreadyExistsException;
+
 import org.simulator.core.enums.SimulationState;
-import org.simulator.core.essential.Behaviour;
 import org.simulator.core.exception.SingletonException;
 import org.simulator.core.render.layering.Layer;
 import org.simulator.core.render.layering.LayerManager;
+import org.simulator.core.resource.SpriteManager;
 
 public final class Engine implements Runnable {
 
@@ -25,22 +29,33 @@ public final class Engine implements Runnable {
 	
 	private SimulationState currentState = SimulationState.STOPPED;
 	
-	private final LayerManager layerManager;
 	private Gameplay gameplayManager;
 	
-	public Engine(String title) throws SingletonException {
+	public Engine(String title) throws SingletonException, InstanceAlreadyExistsException {
 
 		if(instance != null)
 			throw new SingletonException(Engine.class);
 
-		thread = new Thread();
+		/* single instance stuff */
+		new SpriteManager();
+		new LayerManager();
+		
+		thread = new Thread(this);
 		window = new SimulationWindow(title);
 		window.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				stop();
 			}
 		});
-		layerManager = new LayerManager();
+		
+		try {
+			System.out.println("Scanning resource folders...");
+			SpriteManager.getSpriteManager().scan(new File("resources"));
+			System.out.println("Done");
+		} catch (IllegalAccessException | IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		instance = this;
 	}
 	
@@ -53,12 +68,16 @@ public final class Engine implements Runnable {
 		Graphics2D g2d = (Graphics2D) strategy.getDrawGraphics();
 		g2d.setColor(new Color(0, 0, 0));
 		g2d.fillRect(0, 0, SimulationWindow.WIDTH, SimulationWindow.HEIGHT);
+		g2d.scale(Mouse.wheel,Mouse.wheel);
+		g2d.translate(Mouse.offsetX, Mouse.offsetY);
+		g2d.setColor(Color.RED);
+		g2d.fillOval(Mouse.mouseX, Mouse.mouseY, 20,20);
 		renderLayers(g2d);
 		strategy.show();
 	}
 	
 	private void tick() {
-		for (Layer layer : layerManager.getLayers()) {
+		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
 			layer.tick();
 		}
 	}
@@ -101,7 +120,7 @@ public final class Engine implements Runnable {
 	}
 
 	public void stop() {
-		if (thread != null && !thread.isAlive())
+		if (thread != null && thread.isInterrupted())
 			throw new RuntimeException("Simulation already stopped.");
 
 		changeSimulationState(SimulationState.STOPPED);
@@ -111,7 +130,7 @@ public final class Engine implements Runnable {
 	}
 	
 	public void onEnd() {
-		for (Layer layer : layerManager.getLayers()) {
+		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
 			layer.onEnd();
 		}
 		gameplayManager.onEnd();
@@ -121,7 +140,7 @@ public final class Engine implements Runnable {
 		System.out.println("Loading gameplay manager and starting game...");
 		gameplayManager = new Gameplay();
 		gameplayManager.onStart();
-		for (Layer layer : layerManager.getLayers()) {
+		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
 			layer.onStart();
 		}
 	}
@@ -132,13 +151,9 @@ public final class Engine implements Runnable {
 	}
 	
 	public void renderLayers(Graphics2D g2d) {
-		for (Layer layer : layerManager.getLayers()) {
+		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
 			layer.render(g2d);
 		}
-	}
-	
-	public LayerManager gerLayerManager() {
-		return layerManager;
 	}
 
 	public static Engine getEngine() {
