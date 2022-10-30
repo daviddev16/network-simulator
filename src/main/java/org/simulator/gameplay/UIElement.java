@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import org.simulator.core.main.Engine;
 import org.simulator.core.render.Base2DElement;
 import org.simulator.core.render.Renderer;
 import org.simulator.core.render.layering.Layer;
@@ -19,7 +18,7 @@ public class UIElement extends Base2DElement {
 	public void onStart() {}
 
 	/*TODO:*/
-	public static final Font ARIAL = new Font("Segoe UI", Font.TRUETYPE_FONT, 10);
+	public static final Font ARIAL = new Font("Segoe UI", Font.TRUETYPE_FONT, 15);
 
 	@Override
 	public Renderer<UIElement> getRenderer() {

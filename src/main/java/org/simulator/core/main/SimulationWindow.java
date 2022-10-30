@@ -46,7 +46,7 @@ public class SimulationWindow extends JFrame {
 
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
-				if (dragging) {
+				if (dragging && dragging1) {
 					int draggingX = Mouse.offsetX + (arg0.getX() - lastX)/Mouse.wheel;
 					int draggingY = Mouse.offsetY + (arg0.getY() - lastY)/Mouse.wheel;
 					Mouse.offsetX = draggingX;
@@ -119,6 +119,8 @@ public class SimulationWindow extends JFrame {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 
+				if(!dragging1)return;
+				
 				if (e.getWheelRotation() >= 1)
 				{
 					if(Mouse.wheel < 2) return;

@@ -16,6 +16,7 @@ import javax.management.InstanceAlreadyExistsException;
 import org.simulator.core.annotation.StaticLayer;
 import org.simulator.core.enums.SimulationState;
 import org.simulator.core.exception.SingletonException;
+import org.simulator.core.render.Colors;
 import org.simulator.core.render.layering.Layer;
 import org.simulator.core.render.layering.LayerManager;
 import org.simulator.core.resource.SpriteManager;
@@ -72,7 +73,7 @@ public final class Engine implements Runnable {
 		}
 		Graphics2D g2d = (Graphics2D) strategy.getDrawGraphics();
 		((Graphics2D)g2d).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(new Color(0, 0, 0));
+		g2d.setColor(Colors.DARKY);
 		g2d.fillRect(0, 0, SimulationWindow.WIDTH, SimulationWindow.HEIGHT);
 		g2d.scale(Mouse.wheel,Mouse.wheel);
 		g2d.translate(Mouse.offsetX, Mouse.offsetY);
