@@ -21,18 +21,11 @@ public class SimulationWindow extends JFrame {
 
 	private SimulationCanvas canvas;
 
-
 	public boolean dragging  = false;
 	public boolean dragging1  = false;
 
 	public int lastX;
-
 	public int lastY;
-	
-
-	public int x;
-
-	public int y;
 
 	public SimulationWindow(final String title) {
 		canvas = new SimulationCanvas(WIDTH, HEIGHT);
@@ -44,42 +37,29 @@ public class SimulationWindow extends JFrame {
 		pack();
 
 		canvas.addMouseMotionListener(new MouseMotionListener() {
-
 			@Override
 			public void mouseMoved(MouseEvent arg0) {
 				Mouse.mouseX = (arg0.getX()/Mouse.wheel) - Mouse.offsetX;
 				Mouse.mouseY = (arg0.getY()/Mouse.wheel) - Mouse.offsetY;
-
-
-
 			}
 
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
-				
-				
 				if (dragging) {
-
 					int draggingX = Mouse.offsetX + (arg0.getX() - lastX)/Mouse.wheel;
 					int draggingY = Mouse.offsetY + (arg0.getY() - lastY)/Mouse.wheel;
-					
 					Mouse.offsetX = draggingX;
 					Mouse.offsetY = draggingY;
-
-					System.out.println(Mouse.offsetX + ", " + Mouse.offsetY);
 					lastX = arg0.getX();
 					lastY = arg0.getY();
 				}
-
 			}
-
 		});
 
 		canvas.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 				dragging = false;
 			}
 
@@ -104,7 +84,6 @@ public class SimulationWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-
 
 			}
 		});
@@ -149,7 +128,6 @@ public class SimulationWindow extends JFrame {
 					if(Mouse.wheel > 10) return;
 					Mouse.wheel += 1;
 				}
-				System.out.println(Mouse.wheel);
 			}
 		});
 	}

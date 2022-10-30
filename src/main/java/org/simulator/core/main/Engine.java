@@ -2,8 +2,10 @@ package org.simulator.core.main;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.Random;
 
 import javax.management.InstanceAlreadyExistsException;
 
+import org.simulator.core.annotation.StaticLayer;
 import org.simulator.core.enums.SimulationState;
 import org.simulator.core.exception.SingletonException;
 import org.simulator.core.render.layering.Layer;
@@ -71,8 +74,18 @@ public final class Engine implements Runnable {
 		g2d.scale(Mouse.wheel,Mouse.wheel);
 		g2d.translate(Mouse.offsetX, Mouse.offsetY);
 		g2d.setColor(Color.RED);
-		g2d.fillOval(Mouse.mouseX, Mouse.mouseY, 20,20);
-		renderLayers(g2d);
+		g2d.fillOval(Mouse.mouseX, Mouse.mouseY, 2,2);
+		/*TODO: refactor*/
+		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
+			if (!layer.getClass().isAnnotationPresent(StaticLayer.class)) 
+				layer.render(g2d);
+		}
+		g2d.setTransform(new AffineTransform());
+		((Graphics2D)g2d).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
+			if (layer.getClass().isAnnotationPresent(StaticLayer.class)) 
+				layer.render(g2d);
+		}
 		strategy.show();
 	}
 	
@@ -150,12 +163,6 @@ public final class Engine implements Runnable {
 			currentState = newState;
 	}
 	
-	public void renderLayers(Graphics2D g2d) {
-		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
-			layer.render(g2d);
-		}
-	}
-
 	public static Engine getEngine() {
 		return instance;
 	}
