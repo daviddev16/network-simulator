@@ -30,6 +30,7 @@ public class SimulationWindow extends JFrame {
 	public SimulationWindow(final String title) {
 		canvas = new SimulationCanvas(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle(title);
 		setSize(new Dimension(WIDTH, HEIGHT));
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -83,6 +84,7 @@ public class SimulationWindow extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				dragging = true;
 				// TODO Auto-generated method stub
 
 			}

@@ -23,6 +23,15 @@ public class LayerManager {
 
 	}
 
+	public Layer getLayerByType(Class<? extends Layer> layerClass) {
+		for (Layer layer : getLayers()) {
+			if(layer.getClass().isAssignableFrom(layerClass)) {
+				return layer;
+			}
+		}
+		return null;
+	}
+	
 	public static LayerManager getLayerManager() {
 		return instance;
 	}

@@ -6,7 +6,6 @@ public interface Hardware {
 	
 	public void setName(String name);
 	
-	/* should be unique tho */
 	public long getId();
 	
 }

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.simulator.core.essential.Behaviour;
 import org.simulator.core.render.Base2DElement;
+import org.simulator.gameplay.impl.BaseDevice;
 
 public abstract class Layer implements Comparable<Layer>, Behaviour {
 	
@@ -56,6 +57,17 @@ public abstract class Layer implements Comparable<Layer>, Behaviour {
 	
 	public int getOrder() {
 		return order;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		for (Base2DElement element : elements) {
+			if (element instanceof BaseDevice) {
+				buffer.append( ((BaseDevice)element).getName() ).append("\n");
+			}
+		}
+		return buffer.toString();
 	}
 	
 }

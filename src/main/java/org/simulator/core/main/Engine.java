@@ -29,6 +29,8 @@ public final class Engine implements Runnable {
 	private SimulationWindow window;
 	
 	private Thread thread;
+
+	private boolean debugMode = false;
 	
 	private SimulationState currentState = SimulationState.STOPPED;
 	
@@ -69,19 +71,20 @@ public final class Engine implements Runnable {
 			return; 
 		}
 		Graphics2D g2d = (Graphics2D) strategy.getDrawGraphics();
+		((Graphics2D)g2d).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(new Color(0, 0, 0));
 		g2d.fillRect(0, 0, SimulationWindow.WIDTH, SimulationWindow.HEIGHT);
 		g2d.scale(Mouse.wheel,Mouse.wheel);
 		g2d.translate(Mouse.offsetX, Mouse.offsetY);
 		g2d.setColor(Color.RED);
-		g2d.fillOval(Mouse.mouseX, Mouse.mouseY, 2,2);
+		//g2d.fillOval(Mouse.mouseX, Mouse.mouseY, 2,2);
 		/*TODO: refactor*/
 		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
 			if (!layer.getClass().isAnnotationPresent(StaticLayer.class)) 
 				layer.render(g2d);
 		}
+		/* reset transformation */
 		g2d.setTransform(new AffineTransform());
-		((Graphics2D)g2d).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		for (Layer layer : LayerManager.getLayerManager().getLayers()) {
 			if (layer.getClass().isAnnotationPresent(StaticLayer.class)) 
 				layer.render(g2d);
@@ -172,5 +175,8 @@ public final class Engine implements Runnable {
 		return gameplayManager;
 	}
 
+	public boolean isDebugMode() {
+		return debugMode;
+	}
 	
 }

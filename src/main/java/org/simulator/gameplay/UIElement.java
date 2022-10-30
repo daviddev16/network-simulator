@@ -1,35 +1,46 @@
 package org.simulator.gameplay;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
 
-import org.simulator.core.main.Mouse;
+import org.simulator.core.main.Engine;
 import org.simulator.core.render.Base2DElement;
 import org.simulator.core.render.Renderer;
-import org.simulator.core.resource.SpriteManager;
+import org.simulator.core.render.layering.Layer;
+import org.simulator.core.render.layering.LayerManager;
 
-public class UIElement extends Base2DElement implements Renderer {
+public class UIElement extends Base2DElement {
 
 	public UIElement(int x, int y, int width, int height) {
 		super(x, y, width, height);
 	}
 	@Override
-	public void onStart() {
-		setRenderer(this);
+	public void onStart() {}
 
-	}
-
-
-	@Override
-	public void draw(Graphics2D g2d) {
-		g2d.drawString("Ola!", getX(), getY());
-	}
-
+	/*TODO:*/
+	public static final Font ARIAL = new Font("Segoe UI", Font.TRUETYPE_FONT, 10);
 
 	@Override
-	public Base2DElement getParent() {
-		return this;
+	public Renderer<UIElement> getRenderer() {
+		return new Renderer<UIElement>() {
+			public UIElement getParent() {
+				return UIElement.this;
+			}
+			@Override
+			public void draw(Graphics2D g2d) {
+				g2d.setFont(ARIAL);
+				g2d.setColor(Color.white);
+				Layer deviceLayer =  LayerManager.getLayerManager().getLayerByType(DevicesLayer.class);
+
+				int c = 0;
+				for(String line : deviceLayer.toString().split("\n")) {
+					g2d.drawString(line, getX(), getY()+c);
+					c+=12;
+				}
+			}
+		};
 	}
-	
-	
+
+
 }
